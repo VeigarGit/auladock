@@ -1,0 +1,175 @@
+.wrapper {
+    max-width: 70rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  
+    display: grid;
+    grid-template-columns: 256px 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filterField {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.filterField label {
+  color: var(--gray-100);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.filterField input,
+.filterField select {
+  width: 100%;
+  border: 1px solid var(--gray-600);
+  border-radius: 8px;
+  background: var(--gray-800);
+  color: var(--gray-100);
+  padding: 0.875rem 1rem;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 87.5%;
+  }
+
+  .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+  }
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 20;
+}
+
+.modal {
+  width: min(100%, 34rem);
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.modalHeader strong {
+  display: block;
+  color: var(--gray-100);
+  font-size: 1.125rem;
+}
+
+.modalHeader span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.closeButton {
+  background: transparent;
+  color: var(--gray-300);
+  border: 1px solid var(--gray-600);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.modalForm {
+  display: grid;
+  gap: 1rem;
+}
+
+.modalForm label {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--gray-100);
+  font-weight: 700;
+}
+
+.modalForm input,
+.modalForm textarea {
+  width: 100%;
+  border: 1px solid var(--gray-600);
+  border-radius: 8px;
+  background: var(--gray-900);
+  color: var(--gray-100);
+  padding: 0.875rem 1rem;
+}
+
+.modalForm textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.checkboxField {
+  display: flex !important;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 400 !important;
+}
+
+.checkboxField input {
+  width: auto;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.modalActions button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.875rem 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modalActions button[type="button"] {
+  background: var(--gray-700);
+  color: var(--gray-100);
+}
+
+.modalActions button[type="submit"] {
+  background: var(--green-500);
+  color: var(--white);
+}
+
+.modalActions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.modalError {
+  color: var(--red-500);
+  font-size: 0.875rem;
+}
