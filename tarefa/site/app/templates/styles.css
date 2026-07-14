@@ -1,0 +1,64 @@
+.background{
+    background-color: beige;
+}
+
+.principal{
+    display: flex;
+    margin: 0 auto;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    gap:12px;
+
+    label, h1{
+        text-align: center;
+    }
+
+    label, button {
+        font-size: 1.2rem;
+        border-radius: 8px;
+    }
+    input{
+        font-size: 1.1rem;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #000;
+    }
+
+}
+
+.imagem{
+    margin: 0 auto;
+    width: 20%;
+}
+
+.animacao{
+    position: relative;
+    width:60%;
+    margin:0 auto;
+    img{
+        position: absolute;
+        width: 20%;
+        object-fit: contain;
+    }
+}
+
+.fig1{
+    animation: alternar 4s infinite;
+}
+
+.fig2{
+    animation: alternar 4s infinite reverse;
+}
+
+@keyframes alternar{
+    0%, 45% {opacity: 1;}
+    50%, 95% {opacity: 0;}
+    100% {opacity: 1;}
+}
