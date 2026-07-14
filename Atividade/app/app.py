@@ -13,7 +13,8 @@ def conectar():
         user=os.getenv('DB_USER', 'root'),
         password=os.getenv('DB_PASSWORD', 'senh@d0root'),
         database=os.getenv('DB_NAME', 'cadastro_db'),
-        cursorclass=pymysql.cursors.DictCursor
+        cursorclass=pymysql.cursors.DictCursor,
+        connect_timeout=5
     )
 
 # ─── Cria a tabela ao iniciar ────────────────────────────
@@ -31,8 +32,9 @@ try:
         """)
     conn.commit()
     conn.close()
-except Exception as e:
-    print(f"Erro ao criar tabela: {e}")
+except pymysql.Error as e:
+    print(f"AVISO: Não foi possível conectar ao banco de dados: {e}")
+    print("O app funcionará, mas as rotas que usam banco de dados exibirão erro.")
 
 # ─── VALIDAÇÕES ──────────────────────────────────────────
 
@@ -55,21 +57,24 @@ def cadastro():
         elif senha != confirmacao:
             flash('Senhas não coincidem')
         else:
-            conn = conectar()
-            with conn.cursor() as cur:
-                cur.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
-                if cur.fetchone():
-                    flash('Este email já está cadastrado')
-                else:
-                    senha_hash = generate_password_hash(senha)
-                    cur.execute(
-                        "INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)",
-                        (nome, email, senha_hash)
-                    )
-                    conn.commit()
-                    conn.close()
-                    return redirect(url_for('login'))
-            conn.close()
+            try:
+                conn = conectar()
+                with conn.cursor() as cur:
+                    cur.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
+                    if cur.fetchone():
+                        flash('Este email já está cadastrado')
+                    else:
+                        senha_hash = generate_password_hash(senha)
+                        cur.execute(
+                            "INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)",
+                            (nome, email, senha_hash)
+                        )
+                        conn.commit()
+                        conn.close()
+                        return redirect(url_for('login'))
+                conn.close()
+            except pymysql.Error as e:
+                flash(f'Erro ao acessar o banco de dados: {e}')
 
     return render_template('cadastro.html')
 
@@ -82,16 +87,19 @@ def login():
         if not email or not senha:
             flash('Preencha todos os campos')
         else:
-            conn = conectar()
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
-                usuario = cur.fetchone()
-            conn.close()
+            try:
+                conn = conectar()
+                with conn.cursor() as cur:
+                    cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
+                    usuario = cur.fetchone()
+                conn.close()
 
-            if usuario and check_password_hash(usuario['senha'], senha):
-                return redirect(url_for('sucesso'))
-            else:
-                flash('Email ou senha incorretos')
+                if usuario and check_password_hash(usuario.get('senha', ''), senha):
+                    return redirect(url_for('sucesso'))
+                else:
+                    flash('Email ou senha incorretos')
+            except pymysql.Error as e:
+                flash(f'Erro ao acessar o banco de dados: {e}')
 
     return render_template('login.html')
 
