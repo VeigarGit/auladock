@@ -1,18 +1,15 @@
 # syntax=docker/dockerfile:1
 FROM python:3.11-slim
 
-# Evita criação de arquivos .pyc e melhora logs
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
 WORKDIR /app
 
 # Instala dependências primeiro (melhor cache)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia apenas o código necessário
+# Copia apenas o código necessário e os templates html
 COPY app.py .
+COPY templates/ templates/
 
 EXPOSE 5000
 

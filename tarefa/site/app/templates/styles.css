@@ -2,6 +2,14 @@
     background-color: beige;
 }
 
+.erros {
+    background: #ffcccc;
+    border: 1px solid #ff0000;
+    padding: 10px;
+    border-radius: 8px;
+    color: #cc0000;
+}
+
 .principal{
     display: flex;
     margin: 0 auto;
@@ -33,7 +41,7 @@
 
 }
 
-.imagem{
+.imagens{
     margin: 0 auto;
     width: 20%;
 }
@@ -42,19 +50,25 @@
     position: relative;
     width:60%;
     margin:0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     img{
         position: absolute;
-        width: 20%;
+        width: 30%;
         object-fit: contain;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
 .fig1{
-    animation: alternar 4s infinite;
+    animation: alternar 1s infinite;
 }
 
 .fig2{
-    animation: alternar 4s infinite reverse;
+    animation: alternar 1s infinite reverse;
 }
 
 @keyframes alternar{

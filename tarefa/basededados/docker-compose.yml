@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    container_name: basededados
+    ports:
+      - "3306:3306"
+    volumes:
+      - .:/db         # Permite hot-reload durante o desenvolvimento
+    environment:
+      - 
+    restart: unless-stopped
