@@ -1,10 +1,11 @@
-so rodar docker compose up --build
-back  http:\\localhost:4000
-front  http:\\localhost:5173/#
 
-adminer  http:\\localhost:8080
 
-Servidor  postgres
-usuario postgres
-Senha 123456
-base de dados tarefas
+cd back
+  docker compose up --build
+
+  Depois, em outro terminal:
+
+cd front
+  docker compose up --build
+
+Ou rodar o docker na raiz do projeto pra rodar tudo 

@@ -1,20 +1,22 @@
 import {
   Controller,
   Get,
-  Post,
-  Put,
   Delete,
   Param,
   Body,
   Query,
   Patch,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { TarefasService } from './tarefas.service';
 import { CreateTarefaDto } from './dto/create-tarefa.dto';
 import { UpdateTarefaDto } from './dto/update-tarefa.dto';
 import { FindTarefaDto } from './dto/find-tarefa.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('tarefas')
+@UseGuards(JwtAuthGuard)
 export class TarefasController {
   constructor(private readonly tarefasService: TarefasService) {}
 

@@ -1,0 +1,21 @@
+services:
+  front:
+    build:
+      context: .
+    environment:
+      VITE_API_PROXY_TARGET: http://back:4000
+    ports:
+      - '5178:5173'
+    volumes:
+      - ./:/app
+      - front_node_modules:/app/node_modules
+    networks:
+      - tarefas_net
+
+volumes:
+  front_node_modules:
+
+networks:
+  tarefas_net:
+    external: true
+    name: tarefas-shared

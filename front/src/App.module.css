@@ -1,6 +1,204 @@
+.authShell {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at top, rgba(0, 183, 126, 0.2), transparent 30%),
+    linear-gradient(180deg, rgba(18, 18, 20, 1), rgba(20, 22, 28, 1));
+}
+
+.authCard {
+  width: min(100%, 40rem);
+  padding: 1.5rem;
+  border: 1px solid var(--gray-700);
+  border-radius: 20px;
+  background: rgba(32, 32, 36, 0.92);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.3);
+}
+
+.authBrand {
+  margin-bottom: 1.25rem;
+}
+
+.bootCard {
+  padding: 1.25rem 1.5rem;
+  border-radius: 999px;
+  background: rgba(32, 32, 36, 0.92);
+  border: 1px solid var(--gray-700);
+  color: var(--gray-100);
+}
+
+.authPanel {
+  max-width: 70rem;
+  margin: 2rem auto 0;
+  padding: 1.5rem;
+  border: 1px solid var(--gray-700);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(16, 18, 24, 0.92), rgba(32, 32, 36, 0.96)),
+    radial-gradient(circle at top right, rgba(0, 183, 126, 0.16), transparent 32%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.authPanelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.authActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.authPanelHeader strong {
+  display: block;
+  color: var(--gray-100);
+  font-size: 1.125rem;
+}
+
+.authPanelHeader span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--gray-400);
+}
+
+.topBar {
+  max-width: 70rem;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.topBar strong {
+  display: block;
+  color: var(--gray-100);
+}
+
+.topBar span {
+  display: block;
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.ghostButton {
+  border: 1px solid var(--gray-600);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gray-100);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.tab,
+.activeTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gray-600);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gray-300);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.activeTab {
+  border-color: var(--green-500);
+  color: var(--white);
+  background: rgba(0, 135, 95, 0.12);
+}
+
+.authForm {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.authForm label {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--gray-100);
+  font-weight: 700;
+}
+
+.authForm input {
+  width: 100%;
+  border: 1px solid var(--gray-600);
+  border-radius: 10px;
+  background: var(--gray-900);
+  color: var(--gray-100);
+  padding: 0.875rem 1rem;
+}
+
+.authForm button {
+  height: 3.25rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--green-500);
+  color: var(--white);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.authForm button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.authError {
+  margin-top: 1rem;
+  color: var(--red-500);
+}
+
+.authSuccess {
+  margin-top: 1rem;
+  color: var(--green-300);
+}
+
+.sessionBox {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--gray-700);
+  background: rgba(18, 18, 20, 0.65);
+}
+
+.sessionBox strong {
+  display: block;
+  color: var(--gray-100);
+}
+
+.sessionBox span {
+  display: block;
+  color: var(--gray-400);
+  margin-top: 0.25rem;
+}
+
+.tokenPreview {
+  overflow: auto;
+  display: block;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: var(--gray-900);
+  color: var(--green-300);
+  font-size: 0.8rem;
+}
+
 .wrapper {
     max-width: 70rem;
-    margin: 2rem auto;
+    margin: 1.5rem auto 2rem;
     padding: 0 1rem;
   
     display: grid;
@@ -40,6 +238,23 @@
 @media (max-width: 768px) {
   html {
     font-size: 87.5%;
+  }
+
+  .authForm {
+    grid-template-columns: 1fr;
+  }
+
+  .authPanelHeader {
+    flex-direction: column;
+  }
+
+  .authActions {
+    justify-content: flex-start;
+  }
+
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .wrapper {

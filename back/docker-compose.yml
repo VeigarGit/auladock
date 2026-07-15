@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: tarefas
     ports:
-      - '5432:5432'
+      - '5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -14,10 +14,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - tarefas_net
 
   back:
     build:
-      context: ./back
+      context: .
     environment:
       PORT: 4000
       JWT_SECRET: local-dev-secret
@@ -28,33 +30,28 @@ services:
       TYPEORM_DATABASE: tarefas
       TYPEORM_SYNCHRONIZE: 'true'
       TYPEORM_LOGGING: 'true'
-      CORS_ORIGIN: http://localhost:5177
+      CORS_ORIGIN: http://localhost:5178
     ports:
-      - '4000:4000'
+      - '4001:4000'
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - tarefas_net
 
   adminer:
     image: adminer:4
     ports:
-      - '8080:8080'
+      - '8081:8080'
     depends_on:
       - postgres
-
-  front:
-    build:
-      context: ./front
-    environment:
-      VITE_API_PROXY_TARGET: http://back:4000
-    ports:
-      - '5177:5173'
-    depends_on:
-      - back
-    volumes:
-      - ./front:/app
-      - front_node_modules:/app/node_modules
+    networks:
+      - tarefas_net
 
 volumes:
   postgres_data:
-  front_node_modules:
+
+networks:
+  tarefas_net:
+    name: tarefas-shared
+    driver: bridge

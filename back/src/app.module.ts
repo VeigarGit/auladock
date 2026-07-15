@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Tarefas } from './tarefas/entities/tarefas.entity';
 import { TarefasModule } from './tarefas/tarefas.module';
+import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,10 +18,11 @@ import { TarefasModule } from './tarefas/tarefas.module';
       username: process.env.TYPEORM_USERNAME,
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DATABASE,
-      entities: [Tarefas],
+      entities: [Tarefas, User],
       synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true',
       logging: process.env.TYPEORM_LOGGING === 'true',
     }),
+    AuthModule,
     TarefasModule,
   ],
   controllers: [AppController],

@@ -5,9 +5,41 @@ import styles from "./App.module.css";
 import { Sidebar } from "./components/Sidebar";
 import { Post } from "./components/Post";
 
+function readStoredUser() {
+  const storedUser = window.localStorage.getItem("authUser");
+
+  if (!storedUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedUser);
+  } catch {
+    return null;
+  }
+}
+
 export function App() {
+  const [screen, setScreen] = useState(() => {
+    const hasStoredToken = Boolean(window.localStorage.getItem("authToken"));
+    return hasStoredToken ? "booting" : "auth";
+  });
+  const [authView, setAuthView] = useState("login");
+  const [authToken, setAuthToken] = useState(() =>
+    window.localStorage.getItem("authToken") ?? ""
+  );
+  const [authUser, setAuthUser] = useState(() => readStoredUser());
+  const [authFormData, setAuthFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [authError, setAuthError] = useState("");
+  const [authSuccess, setAuthSuccess] = useState("");
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
   const [tarefas, setTarefas] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -24,13 +56,108 @@ export function App() {
     data: "",
   });
 
+  const isAuthenticated = Boolean(authToken && authUser);
+
+  function getAuthHeaders(extraHeaders = {}) {
+    return authToken
+      ? {
+          Authorization: `Bearer ${authToken}`,
+          ...extraHeaders,
+        }
+      : extraHeaders;
+  }
+
+  function persistSession(data) {
+    const nextToken = data.accessToken ?? "";
+    const nextUser = data.user ?? null;
+
+    setAuthToken(nextToken);
+    setAuthUser(nextUser);
+    window.localStorage.setItem("authToken", nextToken);
+    window.localStorage.setItem("authUser", JSON.stringify(nextUser));
+  }
+
+  function clearSession({ keepAuthView = false } = {}) {
+    setAuthToken("");
+    setAuthUser(null);
+    setTarefas([]);
+    window.localStorage.removeItem("authToken");
+    window.localStorage.removeItem("authUser");
+    setAuthSuccess("");
+    setAuthError("");
+    setError("");
+    setIsLoading(false);
+    setIsModalOpen(false);
+    setEditingTaskId(null);
+    setFormError("");
+    setAuthFormData({
+      name: "",
+      email: "",
+      password: "",
+    });
+
+    if (!keepAuthView) {
+      setAuthView("login");
+    }
+  }
+
+  useEffect(() => {
+    async function bootstrapSession() {
+      if (!authToken) {
+        setScreen("auth");
+        return;
+      }
+
+      try {
+        const response = await fetch("/auth/me", {
+          headers: getAuthHeaders(),
+        });
+
+        if (!response.ok) {
+          throw new Error("Sessão inválida");
+        }
+
+        const data = await response.json();
+
+        if (data?.user) {
+          setAuthUser(data.user);
+          window.localStorage.setItem("authUser", JSON.stringify(data.user));
+          setScreen("tasks");
+          return;
+        }
+
+        throw new Error("Sessão inválida");
+      } catch {
+        clearSession({ keepAuthView: true });
+        setScreen("auth");
+      }
+    }
+
+    bootstrapSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     async function loadTarefas() {
+      if (!isAuthenticated) {
+        return;
+      }
+
       try {
         setIsLoading(true);
         setError("");
 
-        const response = await fetch("/tarefas");
+        const response = await fetch("/tarefas", {
+          headers: getAuthHeaders(),
+        });
+
+        if (response.status === 401) {
+          clearSession({ keepAuthView: true });
+          setScreen("auth");
+          setAuthError("Sua sessão expirou. Faça login novamente.");
+          return;
+        }
+
         if (!response.ok) {
           throw new Error("Falha ao carregar tarefas");
         }
@@ -38,16 +165,100 @@ export function App() {
         const data = await response.json();
         setTarefas(Array.isArray(data) ? data : data.tarefas ?? []);
       } catch (err) {
+        setTarefas([]);
         setError(err.message || "Erro inesperado ao buscar tarefas");
       } finally {
         setIsLoading(false);
       }
     }
 
-    loadTarefas();
-  }, []);
+    if (screen === "tasks" && isAuthenticated) {
+      loadTarefas();
+    }
+  }, [authToken, isAuthenticated, screen]);
+
+  function handleAuthFieldChange(event) {
+    const { name, value } = event.target;
+
+    setAuthFormData((state) => ({
+      ...state,
+      [name]: value,
+    }));
+  }
+
+  async function handleSubmitAuth(event) {
+    event.preventDefault();
+
+    try {
+      setIsAuthenticating(true);
+      setAuthError("");
+      setAuthSuccess("");
+
+      const isRegister = authView === "register";
+      const response = await fetch(
+        isRegister ? "/auth/register" : "/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            isRegister
+              ? {
+                  name: authFormData.name.trim(),
+                  email: authFormData.email.trim(),
+                  password: authFormData.password,
+                }
+              : {
+                  email: authFormData.email.trim(),
+                  password: authFormData.password,
+                }
+          ),
+        }
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message ||
+            (isRegister
+              ? "Falha ao cadastrar usuário. Verifique os dados informados."
+              : "Falha ao autenticar usuário. Verifique os dados informados.")
+        );
+      }
+
+      persistSession(data);
+      setScreen("tasks");
+      setAuthSuccess(
+        isRegister
+          ? "Usuário cadastrado com sucesso."
+          : "Login realizado com sucesso."
+      );
+      setAuthFormData({
+        name: "",
+        email: "",
+        password: "",
+      });
+    } catch (err) {
+      setAuthError(err.message || "Erro inesperado ao autenticar usuário");
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
+
+  function handleLogout() {
+    clearSession();
+    setScreen("auth");
+  }
 
   function openModal() {
+    if (!isAuthenticated) {
+      setAuthError("Faça login para criar uma tarefa.");
+      setScreen("auth");
+      return;
+    }
+
     setFormError("");
     setEditingTaskId(null);
     setFormData({
@@ -100,9 +311,9 @@ export function App() {
         isEditing ? `/tarefas/${editingTaskId}` : "/tarefas",
         {
           method: isEditing ? "PATCH" : "POST",
-          headers: {
+          headers: getAuthHeaders({
             "Content-Type": "application/json",
-          },
+          }),
           body: JSON.stringify({
             titulo: formData.titulo.trim(),
             descricao: formData.descricao.trim(),
@@ -110,6 +321,13 @@ export function App() {
           }),
         }
       );
+
+      if (response.status === 401) {
+        clearSession({ keepAuthView: true });
+        setScreen("auth");
+        setAuthError("Sua sessão expirou. Faça login novamente.");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(
@@ -153,7 +371,15 @@ export function App() {
     try {
       const response = await fetch(`/tarefas/${id}`, {
         method: "DELETE",
+        headers: getAuthHeaders(),
       });
+
+      if (response.status === 401) {
+        clearSession({ keepAuthView: true });
+        setScreen("auth");
+        setAuthError("Sua sessão expirou. Faça login novamente.");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Falha ao excluir tarefa");
@@ -197,9 +423,126 @@ export function App() {
     return titleMatch && statusMatch && matchesDateFilter(tarefaDate);
   });
 
+  const authTitle =
+    authView === "register" ? "Criar conta" : "Entrar na sua conta";
+  const authDescription =
+    authView === "register"
+      ? "Cadastre um usuário e receba acesso imediato às tarefas."
+      : "Faça login para continuar no painel de tarefas.";
+
+  if (screen === "booting") {
+    return (
+      <div className={styles.authShell}>
+        <div className={styles.bootCard}>Validando sua sessão...</div>
+      </div>
+    );
+  }
+
+  if (screen === "auth") {
+    return (
+      <div className={styles.authShell}>
+        <section className={styles.authCard}>
+          <div className={styles.authBrand}>
+            <Header />
+          </div>
+
+          <div className={styles.authPanelHeader}>
+            <div>
+              <strong>{authTitle}</strong>
+              <span>{authDescription}</span>
+            </div>
+          </div>
+
+          <div className={styles.authActions}>
+            <button
+              type="button"
+              className={authView === "login" ? styles.activeTab : styles.tab}
+              onClick={() => setAuthView("login")}
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              className={
+                authView === "register" ? styles.activeTab : styles.tab
+              }
+              onClick={() => setAuthView("register")}
+            >
+              Cadastro
+            </button>
+          </div>
+
+          <form className={styles.authForm} onSubmit={handleSubmitAuth}>
+            {authView === "register" ? (
+              <label>
+                Nome
+                <input
+                  name="name"
+                  value={authFormData.name}
+                  onChange={handleAuthFieldChange}
+                  placeholder="Seu nome"
+                  required
+                />
+              </label>
+            ) : null}
+
+            <label>
+              E-mail
+              <input
+                type="email"
+                name="email"
+                value={authFormData.email}
+                onChange={handleAuthFieldChange}
+                placeholder="voce@exemplo.com"
+                required
+              />
+            </label>
+
+            <label>
+              Senha
+              <input
+                type="password"
+                name="password"
+                value={authFormData.password}
+                onChange={handleAuthFieldChange}
+                placeholder="Sua senha"
+                required
+              />
+            </label>
+
+            <button type="submit" disabled={isAuthenticating}>
+              {isAuthenticating
+                ? authView === "register"
+                  ? "Cadastrando..."
+                  : "Entrando..."
+                : authView === "register"
+                ? "Cadastrar usuário"
+                : "Fazer login"}
+            </button>
+          </form>
+
+          {authError ? <p className={styles.authError}>{authError}</p> : null}
+          {authSuccess ? (
+            <p className={styles.authSuccess}>{authSuccess}</p>
+          ) : null}
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header />
+      <div className={styles.topBar}>
+        <div>
+          <strong>{authUser?.name}</strong>
+          <span>{authUser?.email}</span>
+        </div>
+        <button type="button" className={styles.ghostButton} onClick={handleLogout}>
+          Sair
+        </button>
+      </div>
+
       <div className={styles.wrapper}>
         <Sidebar onCreateTask={openModal} />
         <main>
@@ -278,7 +621,11 @@ export function App() {
                     : "Cadastre uma tarefa usando o formulário abaixo"}
                 </span>
               </div>
-              <button type="button" onClick={closeModal} className={styles.closeButton}>
+              <button
+                type="button"
+                onClick={closeModal}
+                className={styles.closeButton}
+              >
                 Fechar
               </button>
             </header>
