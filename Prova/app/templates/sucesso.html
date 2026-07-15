@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Realizado</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .caixa { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        h2 { color: #28a745; margin-bottom: 10px; }
+        p { color: #555; font-size: 16px; margin-bottom: 20px; }
+        a { text-decoration: none; background-color: #007BFF; color: white; padding: 10px 20px; border-radius: 4px; font-weight: bold; }
+        a:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="caixa">
+        <h2>🎉 Sucesso!</h2>
+        <!-- O Flask vai trocar essa variável {{ nome }} pelo nome que o usuário digitou! -->
+        <p>O usuário <strong>{{ nome_usuario }}</strong> foi cadastrado com sucesso no sistema.</p>
+        
+        <a href="/">Voltar ao Início</a>
+    </div>
+</body>
+</html>
