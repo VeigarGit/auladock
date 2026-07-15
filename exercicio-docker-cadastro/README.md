@@ -1,13 +1,13 @@
 # Sistema de Cadastro de Usuarios com Docker
 
-Aplicacao web para cadastro e login de usuarios, construida com Python/Flask e MySQL, orquestrada com Docker Compose.
+Aplicação web para cadastro e login de usuarios, construida com Python/Flask e MySQL, orquestrada com Docker Compose.
 
 ## Funcionalidades
 
 - Cadastro de usuarios (nome, email, senha)
-- Validacao de formulario (email valido, senha minima 6 caracteres, confirmacao de senha)
+- Validação de formulario (email valido, senha minima 6 caracteres, confirmação de senha)
 - Senha armazenada com hash (werkzeug.security)
-- Login com verificacao de senha
+- Login com verificação de senha
 - Mensagens de erro amigaveis
 - Persistencia de dados via volume Docker
 
