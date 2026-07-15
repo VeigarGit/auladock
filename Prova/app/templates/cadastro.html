@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Seguro</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .caixa { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; }
+        h2 { text-align: center; color: #333; }
+        label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+        .input-group { position: relative; }
+        input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; padding-right: 35px; }
+        .eye-icon { position: absolute; right: 10px; top: 12px; cursor: pointer; font-size: 16px; user-select: none; }
+        button { width: 100%; padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 4px; margin-top: 20px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        .error-msg { color: red; text-align: center; margin-bottom: 10px; font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="caixa">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="error-msg">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2>Criar Conta</h2>
+        
+        <form action="/cadastrar" method="POST">
+            <label>Nome Completo:</label>
+            <input type="text" name="nome" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <label>Senha:</label>
+            <div class="input-group">
+                <input type="password" name="senha" id="senha" minlength="6" required>
+                <span class="eye-icon" onclick="togglePassword('senha', this)">👁️</span>
+            </div>
+
+            <label>Confirmar Senha:</label>
+            <div class="input-group">
+                <input type="password" name="confirmacao" id="confirmacao" minlength="6" required>
+                <span class="eye-icon" onclick="togglePassword('confirmacao', this)">👁️</span>
+            </div>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.textContent = "👁️"; 
+            } else {
+                input.type = "password";
+                icon.textContent = "🔒"; 
+            }
+        }
+
+        const senha = document.getElementById('senha');
+        const confirmacao = document.getElementById('confirmacao');
+
+        function validarSenha() {
+            if (senha.value !== confirmacao.value) {
+                confirmacao.setCustomValidity("As senhas não coincidem!");
+            } else {
+                confirmacao.setCustomValidity(""); 
+            }
+        }
+
+        senha.addEventListener('change', validarSenha);
+        confirmacao.addEventListener('keyup', validarSenha);
+    </script>
+</body>
+</html>
