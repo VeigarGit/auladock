@@ -50,6 +50,11 @@ def validar_email(email):
     return re.match(padrao, email) is not None
 
 
+@app.route('/')
+def index():
+    return redirect(url_for('cadastro'))
+
+
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     erros = {}

@@ -72,6 +72,7 @@ docker compose down -v
 
 | Rota | Metodo | Descricao |
 |------|--------|-----------|
+| `/` | GET | Redireciona para /cadastro |
 | `/cadastro` | GET/POST | Formulario de cadastro de novos usuarios |
 | `/login` | GET/POST | Formulario de login |
 | `/sucesso` | GET | Pagina de confirmacao apos cadastro |
