@@ -1,0 +1,38 @@
+services:
+  web:
+    build: .
+    container_name: cadastro-web
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=cadastro_user
+      - DB_PASSWORD=cadastro_pass
+      - DB_NAME=cadastro_db
+      - DB_PORT=3306
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: cadastro-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=cadastro_db
+      - MYSQL_USER=cadastro_user
+      - MYSQL_PASSWORD=cadastro_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
