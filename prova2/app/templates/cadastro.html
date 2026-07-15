@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Profissional</title>
+    <!-- Font Awesome para os ícones (fa) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .register-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .register-header h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .register-header p {
+            color: #777;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            transition: color 0.3s;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #4a90e2;
+        }
+        .input-group input:focus + i {
+            color: #4a90e2;
+        }
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .btn-register:hover {
+            background-color: #357abd;
+        }
+        .register-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .register-footer a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-container">
+    <div class="register-header">
+        <h2>Criar Nova Conta</h2>
+        <p>Preencha os dados abaixo para se cadastrar</p>
+    </div>
+
+    <!-- Envia os dados para a rota /cadastro do Python -->
+    <form action="/cadastro" method="POST">
+        <div class="input-group">
+            <input type="text" name="nome" placeholder="Nome completo" required>
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="email" name="email" placeholder="E-mail institucional" required>
+            <i class="fa-solid fa-envelope"></i>
+        </div>
+        
+        <div class="input-group">
+            <input type="password" name="senha" placeholder="Escolha uma senha (mín. 6 caracteres)" required>
+            <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="confirmacao" placeholder="Confirme a sua senha" required>
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <button type="submit" class="btn-register">Finalizar Cadastro</button>
+    </form>
+
+    <!-- Link bônus apontando para a melhoria futura do Login -->
+    <div class="register-footer">
+        <p>Já possui uma conta? <a href="/login">Acessar Login (Beta)</a></p>
+    </div>
+</div>
+
+</body>
+</html>

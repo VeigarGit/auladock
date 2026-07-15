@@ -1,0 +1,131 @@
+#Interface web pronta caso queira implementar
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Profissional</title>
+    <!-- Font Awesome para os ícones (fa) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .login-header p {
+            color: #777;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            transition: color 0.3s;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #4a90e2;
+        }
+        .input-group input:focus + i {
+            color: #4a90e2;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn-login:hover {
+            background-color: #357abd;
+        }
+        .login-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .login-footer a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-header">
+        <h2>Seja bem-vindo</h2>
+        <p>Insira suas credenciais para acessar</p>
+    </div>
+
+    <!-- Envia os dados via POST para a rota /login -->
+    <form action="/login" method="POST">
+        <div class="input-group">
+            <input type="email" name="email" placeholder="E-mail institucional" required>
+            <i class="fa-solid fa-envelope"></i>
+        </div>
+        
+        <div class="input-group">
+            <input type="password" name="senha" placeholder="Sua senha" required>
+            <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <button type="submit" class="btn-login">Entrar</button>
+    </form>
+
+    <div class="login-footer">
+        <p>Não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a></p>
+    </div>
+</div>
+
+</body>
+</html>

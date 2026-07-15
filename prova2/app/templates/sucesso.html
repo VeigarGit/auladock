@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucesso!</title>
+    <!-- Font Awesome para os ícones (fa) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .success-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 64px;
+            color: #2ecc71; /* Verde profissional */
+            margin-bottom: 20px;
+        }
+        .success-container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .success-container p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #357abd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="success-container">
+    <i class="fa-solid fa-circle-check success-icon"></i>
+    <h2>Operação Concluída!</h2>
+    <p>Os dados foram validados pelo servidor e salvos no banco de dados com sucesso.</p>
+    
+    <a href="/cadastro" class="btn-back">Voltar ao Início</a>
+</div>
+
+</body>
+</html>
