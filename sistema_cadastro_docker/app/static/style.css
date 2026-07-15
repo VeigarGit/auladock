@@ -1,0 +1,166 @@
+/* Raiz */
+* {
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Geral */
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 40px;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+    color: #1a1a1a;
+    font-size: 4rem;
+}
+
+
+/* Links e botões */
+a,
+button {
+
+    display: inline-block;
+    background: #1A1A1A;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: 200ms
+}
+
+
+a:hover,
+button:hover {
+    background: #721CFF;
+    transition: 1000ms;
+}
+
+
+.container-flex{
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 100vh;
+    margin-inline: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Lista de Usuários*/
+
+.container-grid{
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.user-card {
+    background: #1A1A1A;
+    width: 320px;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    background-color: #721CFF;
+}
+
+.user-card h2 {
+    font-size: 1.2rem;
+    color: #FAFAFA;
+    margin-bottom: 8px;
+}
+
+.user-card p {
+    color: #FAFAFA;
+    word-break: break-word;
+}
+
+/* Formulário de Cadastro*/
+.form-card{
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    font-family: "Poppins", sans-serif;
+}
+
+.form-card h1{
+    font-size: 2rem;
+    margin-bottom: .5rem;
+}
+
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:2rem;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    font-weight:600;
+    margin-bottom:.5rem;
+}
+
+input{
+    font-family:"Poppins", sans-serif;
+    font-size:1rem;
+    padding:14px 16px;
+    border:2px solid #ddd;
+    border-radius:10px;
+    outline:none;
+    transition:.25s;
+}
+
+input:focus{
+    border-color:#721CFF;
+    box-shadow:0 0 0 4px rgba(114,28,255,.15);
+}
+
+button{
+    width:100%;
+    margin-top:1rem;
+    font-size:1rem;
+    font-weight:600;
+    padding:14px;
+}
+
+.back_link{
+    width:100%;
+    margin-top:1rem;
+    font-size:1rem;
+    font-weight:600;
+    padding:14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

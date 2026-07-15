@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Usuário</title>
+</head>
+<body>
+
+<main>
+    <div class="form-card">
+
+        <h1>Cadastrar Usuário</h1>
+
+        <p class="subtitle">
+            Preencha os dados para cadastrar um novo usuário.
+        </p>
+
+        <form id="user-form">
+
+            <div class="form-group">
+                <label for="full_name">Nome Completo</label>
+                <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    placeholder="João da Silva"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="joao@email.com"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="********"
+                    required
+                >
+            </div>
+            <div class="form-group">
+                <label for="second_password">Repita a Senha</label>
+                <input
+                    type="password"
+                    id="second_password"
+                    name="second_password"
+                    placeholder="********"
+                    required
+                >
+            </div>
+            <button type="submit">
+                Cadastrar
+            </button>
+
+            <a href="/" class="back_link">Voltar</a>
+
+        </form>
+
+    </div>
+</main>
+
+<script>
+    document.getElementById("user-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        // Preciso transformar o Form html em Json para poder mnanter como rest
+        
+        const password = form.password.value;
+        const second_password = form.second_password.value;
+        
+        if (password !== second_password){
+            alert("As senhas não combinam");
+            return;
+        }
+        const user = {
+            full_name: form.full_name.value,
+            email: form.email.value,
+            password: password
+        };
+
+        try {
+            const response = await fetch("/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                window.location.href = "/users/success";
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert("Erro ao conectar com o servidor.");
+        }
+
+    });
+</script>
+
+</body>
+</html>

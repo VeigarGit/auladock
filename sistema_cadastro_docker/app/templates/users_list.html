@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários</title>
+</head>
+<body>
+    <main>
+        <h1>Usuários Cadastrados</h1>
+
+        {% if users %}
+            <div class="container-grid">
+                {% for user in users %}
+                    <div class="user-card">
+                        <h2>{{ user.full_name }}</h2>
+                        <p>{{ user.email }}</p>
+                    </div>
+                {% endfor %}
+                <div user-card>
+                    <a href="/"> Voltar</a>
+                </div>
+            </div>
+        {% else %}
+            <p>Nenhum usuário cadastrado.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
