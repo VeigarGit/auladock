@@ -1,7 +1,18 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash
+import mysql.connector
+from mysql.connector import Error
 
 app = Flask(__name__)
+
+def get_db_connection():
+    return mysql.connector.connect(
+        host=os.environ.get('DB_HOST', 'db'),
+        user=os.environ.get('DB_USER', 'usuario'),
+        password=os.environ.get('DB_PASSWORD', 'senha123'),
+        database=os.environ.get('DB_NAME', 'cadastro')
+    )
 
 @app.route('/')
 def home():
@@ -27,7 +38,27 @@ def enviar():
 
     senha_hash = generate_password_hash(senha)
 
-    # TODO: Inserir no banco MySQL (etapa seguinte)
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
+        if cursor.fetchone():
+            erros.append('Email já cadastrado')
+            cursor.close()
+            conn.close()
+            return render_template('cadastro.html', errors=erros, nome=nome, email=email)
+
+        cursor.execute(
+            "INSERT INTO usuarios (nome, email, senha_hash) VALUES (%s, %s, %s)",
+            (nome, email, senha_hash)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Error as e:
+        erros.append('Erro ao cadastrar. Tente novamente.')
+        return render_template('cadastro.html', errors=erros, nome=nome, email=email)
 
     return redirect(url_for('sucesso'))
 
